@@ -11,7 +11,14 @@
 |
 */
 
-Route::get('/', 'RoomController@index');
+Route::get('/', 'HomeController@index');
+
+// room
+Route::group(['middleware' => 'auth', 'prefix' => 'room'], function () {
+
+    Route::get('create' , 'RoomController@add');
+    Route::get('lists' , 'RoomController@lists');
+});
 
 Auth::routes();
 

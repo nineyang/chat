@@ -63,6 +63,19 @@
                                             {{ csrf_field() }}
                                         </form>
                                     </li>
+
+                                    <li>
+                                        <a href="{{ url('room/lists') }}">
+                                            My RoomList
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url('room/create') }}">
+                                            Create Room
+                                        </a>
+                                    </li>
+
                                 </ul>
                             </li>
                         @endguest
