@@ -19,9 +19,14 @@ class RoomController extends Controller
         return view('home');
     }
 
-    public function add()
+    public function create()
     {
         return view('add');
+    }
+
+    public function add(Request $request)
+    {
+        dd($request);
     }
 
     public function lists()

@@ -16,8 +16,9 @@ Route::get('/', 'HomeController@index');
 // room
 Route::group(['middleware' => 'auth', 'prefix' => 'room'], function () {
 
-    Route::get('create' , 'RoomController@add');
+    Route::get('create' , 'RoomController@create');
     Route::get('lists' , 'RoomController@lists');
+    Route::post('add' , 'RoomController@add');
 });
 
 Auth::routes();
