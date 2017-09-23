@@ -53,7 +53,7 @@ class RoomController extends Controller
             abort(403);
         }
 
-        return view('edit' , ['room' => $room]);
+        return view('edit', ['room' => $room]);
     }
 
     /**
@@ -80,9 +80,37 @@ class RoomController extends Controller
         return redirect('room/lists')->with('message', 'created success');
     }
 
+    /**
+     * @param StoreRoom $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(StoreRoom $request , $id)
+    {
+        $file = $request->file('cover');
+        $data = [
+            'title' => $request->get('title'),
+            'is_private' => $request->get('isPrivate'),
+            'cipher' => $request->get('cipher') ? bcrypt($request->get('cipher')) : '',
+            'user_id' => $request->user()->id,
+            'updated_at' => time()
+        ];
+//        存储文件
+        if ($file) {
+            $data['cover'] = Storage::disk('public')->putFile(date('Y/m'), $file);
+        }
+        $this->room->where('id' , $id)
+            ->update($data);
+
+        return redirect('room/lists')->with('message', 'updated success');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function lists()
     {
-        $rooms = $this->room->paginate(10);
+        $rooms = $this->room->paginate(config('room.page_size'));
         return view('lists', ['rooms' => $rooms]);
     }
 }

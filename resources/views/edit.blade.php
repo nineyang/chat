@@ -8,7 +8,7 @@
                 <div class="panel-heading">Created</div>
 
                 <div class="panel-body">
-                    <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ url('room/add') }}">
+                    <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ url("room/{$room->id}/update") }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
