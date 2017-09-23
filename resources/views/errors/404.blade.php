@@ -41,6 +41,7 @@
         <div class="container">
             <div class="content">
                 <div class="title">404 Not Found.</div>
+                <h2>{{ $exception->getMessage() }}</h2>
             </div>
         </div>
     </body>

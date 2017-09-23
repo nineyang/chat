@@ -21,6 +21,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'room'], function () {
     Route::post('add' , 'RoomController@add');
     Route::get('/{id}/edit' , 'RoomController@edit');
     Route::post('/{id}/update' , 'RoomController@update');
+    Route::get('{id}' , 'RoomController@chat');
 });
 
 Auth::routes();

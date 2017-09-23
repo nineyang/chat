@@ -10,4 +10,20 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /**
+     * @param $id
+     * @param string $message
+     * @return mixed
+     */
+    public function checkAndGet($id, $message = '')
+    {
+        $table = $this->model->getTable();
+        $config = config("status.{$table}");
+        $info = $this->model->find($id);
+        if (!$info || $info->status != $config['available']) {
+            abort(404, $message ? $message : "This {$table} does not exist.");
+        }
+        return $info;
+    }
 }

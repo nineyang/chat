@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRoom;
 use App\Room;
+use App\RoomJoin;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Mockery\Exception;
@@ -13,18 +15,25 @@ use Illuminate\Http\File;
 class RoomController extends Controller
 {
     /**
-     * @var
+     * @var Room
      */
-    public $room;
+    public $model;
+
+    /**
+     * @var RoomJoin
+     */
+    public $join;
 
     /**
      * RoomController constructor.
      * @param Room $room
+     * @param RoomJoin $join
      */
-    public function __construct(Room $room)
+    public function __construct(Room $room, RoomJoin $join)
     {
         $this->middleware('auth');
-        $this->room = $room;
+        $this->model = $room;
+        $this->join = $join;
     }
 
     public function index()
@@ -44,13 +53,10 @@ class RoomController extends Controller
     public function edit(Request $request)
     {
 //        判断是否存在
-        $room = $this->room->find($request->id);
-        if (!$room) {
-            abort(404);
-        }
+        $room = $this->checkAndGet($request->id);
 //        判断是否有权限
         if ($room->user_id != $request->user()->id) {
-            abort(403);
+            abort(403 , '无权操作');
         }
 
         return view('edit', ['room' => $room]);
@@ -75,7 +81,7 @@ class RoomController extends Controller
         if ($file) {
             $data['cover'] = Storage::disk('public')->putFile(date('Y/m'), $file);
         }
-        $this->room->fill($data)->save();
+        $this->model->fill($data)->save();
 
         return redirect('room/lists')->with('message', 'created success');
     }
@@ -85,7 +91,7 @@ class RoomController extends Controller
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(StoreRoom $request , $id)
+    public function update(StoreRoom $request, $id)
     {
         $file = $request->file('cover');
         $data = [
@@ -99,7 +105,7 @@ class RoomController extends Controller
         if ($file) {
             $data['cover'] = Storage::disk('public')->putFile(date('Y/m'), $file);
         }
-        $this->room->where('id' , $id)
+        $this->model->where('id', $id)
             ->update($data);
 
         return redirect('room/lists')->with('message', 'updated success');
@@ -110,7 +116,17 @@ class RoomController extends Controller
      */
     public function lists()
     {
-        $rooms = $this->room->paginate(config('room.page_size'));
+        $rooms = $this->model->paginate(config('room.page_size'));
         return view('lists', ['rooms' => $rooms]);
+    }
+
+    public function chat($id)
+    {
+//        判断房间是否存在
+        $room = $this->checkAndGet($id);
+//        判断用户是否加入
+        if (!$this->model->checkUserJoined($id, $this->join)) {
+            abort(403 , '请先加入房间');
+        }
     }
 }
