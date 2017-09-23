@@ -19,8 +19,15 @@
 </head>
 <body>
     <div id="app">
+        @if (session('message'))
+            <div class="alert alert-success fade in" style="margin-bottom: 0">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <strong>Success!</strong> {{ session('message') }}
+            </div>
+        @endif
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
+
                 <div class="navbar-header">
 
                     <!-- Collapsed Hamburger -->
