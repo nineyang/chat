@@ -19,6 +19,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'room'], function () {
     Route::get('create' , 'RoomController@create');
     Route::get('lists' , 'RoomController@lists');
     Route::post('add' , 'RoomController@add');
+    Route::get('/{id}/edit' , 'RoomController@edit');
 });
 
 Auth::routes();

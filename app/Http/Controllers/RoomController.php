@@ -41,6 +41,21 @@ class RoomController extends Controller
         return view('add');
     }
 
+    public function edit(Request $request)
+    {
+//        判断是否存在
+        $room = $this->room->find($request->id);
+        if (!$room) {
+            abort(404);
+        }
+//        判断是否有权限
+        if ($room->user_id != $request->user()->id) {
+            abort(403);
+        }
+
+        return view('edit' , ['room' => $room]);
+    }
+
     /**
      * @param StoreRoom $request
      * @return mixed
@@ -62,12 +77,12 @@ class RoomController extends Controller
         }
         $this->room->fill($data)->save();
 
-        return redirect('room/lists')->with('message' , 'created success');
+        return redirect('room/lists')->with('message', 'created success');
     }
 
     public function lists()
     {
         $rooms = $this->room->paginate(10);
-        return view('lists' , ['rooms' => $rooms]);
+        return view('lists', ['rooms' => $rooms]);
     }
 }

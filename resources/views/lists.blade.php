@@ -11,11 +11,13 @@
                     @foreach($rooms as $room)
                         <div class="col-sm-6 col-md-4">
                             <div class="thumbnail">
-                                <img src="{{asset(empty($room->cover) ? config('room.default_room_pic') : $room->cover)}}">
+                                <img src="{{asset(empty($room->cover) ? config('room.default_room_pic') : config('room.file_type') . $room->cover)}}" alt="{{$room->title}}">
                                 <div class="caption">
                                     <h4>{{$room->title}}</h4>
                                     <p>
-                                        <a href="#" class="btn btn-primary" role="button">编辑</a>
+                                        @if($room->user_id == Auth::user()->id)
+                                            <a href="{{url("room/$room->id/edit")}}" class="btn btn-primary" role="button">编辑</a>
+                                        @endif
                                     </p>
                                 </div>
                             </div>
@@ -56,6 +58,7 @@
 
 <style>
     .row .thumbnail img {
-        height:150px;
+        height: 150px;
+        cursor: pointer;
     }
 </style>

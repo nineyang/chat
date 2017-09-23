@@ -6,5 +6,6 @@
  */
 
 return [
-    'default_room_pic' => 'storage/default_room.jpg'
+    'default_room_pic' => 'storage/default_room.jpg',
+    'file_type' => 'storage/',
 ];
