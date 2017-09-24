@@ -49,13 +49,13 @@ class Swoole extends Command
     {
         $ws = new \swoole_websocket_server(config('swoole.host'), config('swoole.port'));
         $ws->on('open', function ($ws, $request) {
-            $ws->push($request->fd, "hello, welcome\n");
+//            $ws->push($request->fd, "hello, welcome\n");
         });
 
         //监听WebSocket消息事件
         $ws->on('message', function ($ws, $frame) {
             foreach ($ws->connections as $connect) {
-                $ws->push($connect, "server: {$frame->data}");
+                $ws->push($connect, "{$frame->data}");
             }
             echo "Message: {$frame->data}\n";
         });

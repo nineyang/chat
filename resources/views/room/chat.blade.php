@@ -45,11 +45,13 @@
                                             <span class="content-span">hello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,world</span>
                                         </div>
                                     </div>
+                                    <div class="clearfix"></div>
+
                                 </div>
 
                                 {{--底部--}}
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="3"></textarea>
+                                    <textarea class="form-control wait-send" rows="3"></textarea>
                                 </div>
                                 <button class="btn btn-primary pull-right"
                                         role="button" id="send">发送
@@ -60,6 +62,8 @@
                         </div>
                     </div>
                     {{--room end--}}
+                    <span class="default-value hide" data-default-avatar="{{config('room.default_avatar')}}"
+                          data-user-id="{{Auth::user()->id}}"></span>
 
                 </div>
 
@@ -71,6 +75,7 @@
     <script src="{{asset('js/ws.js')}}">
 
     </script>
+
 @endsection
 
 <style>
@@ -99,14 +104,21 @@
 
     .chat-left {
         margin-left: 10px;
+        margin-top: 10px;
+    }
+
+    .chat-right {
+        margin-top: 10px;
     }
 
     .chat-left > div {
         margin-left: 3px;
+        margin-bottom:5px;
     }
 
     .chat-right > div {
         margin-right: 3px;
+        margin-bottom:5px;
     }
 
     .username {
