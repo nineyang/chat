@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
+use Workerman\Worker;
 
 class RoomController extends Controller
 {
@@ -133,6 +134,8 @@ class RoomController extends Controller
         if (Auth::user()->id != $room->user_id && !$this->model->checkUserJoined($id, $this->join)) {
             abort(403, '请先加入房间');
         }
+
+//        websocket
 
         return view('room.chat', ['room' => $room]);
     }

@@ -52,7 +52,7 @@
                                     <textarea class="form-control" rows="3"></textarea>
                                 </div>
                                 <button class="btn btn-primary pull-right"
-                                        role="button">发送
+                                        role="button" id="send">发送
                                 </button>
                                 <div class="clearfix"></div>
 
@@ -67,6 +67,10 @@
         </div>
 
     </div>
+
+    <script src="{{asset('js/ws.js')}}">
+
+    </script>
 @endsection
 
 <style>
