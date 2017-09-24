@@ -35,6 +35,11 @@ class RoomController extends Controller
         $this->join = $join;
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function join(Request $request, $id)
     {
         $room = $this->checkAndGet($id);

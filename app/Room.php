@@ -31,6 +31,15 @@ class Room extends Model
     ];
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function message()
+    {
+        return $this->morphMany(Message::class , 'room');
+    }
+
+    /**
+     * 判断用户是否加入
      * @param $roomId
      * @param RoomJoin $join
      * @return bool

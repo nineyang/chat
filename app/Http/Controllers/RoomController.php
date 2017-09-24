@@ -133,7 +133,7 @@ class RoomController extends Controller
         if (Auth::user()->id != $room->user_id && !$this->model->checkUserJoined($id, $this->join)) {
             abort(403, '请先加入房间');
         }
-
+        dd($room->message);
     }
 
 
