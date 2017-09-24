@@ -26,5 +26,5 @@ php artisan swoole:action start
 ![Aaron Swartz](/public/image/chat.gif)
 
 ## todo
-1. 完成发送效果
+~~1. 完成发送效果~~
 2. 数据入库
