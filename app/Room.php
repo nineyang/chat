@@ -31,11 +31,12 @@ class Room extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function message()
     {
-        return $this->morphMany(Message::class , 'room');
+        return $this->hasMany(Message::class);
+//        return $this->morphMany(Message::class , 'room');
     }
 
     /**
@@ -44,13 +45,13 @@ class Room extends Model
      * @param RoomJoin $join
      * @return bool
      */
-    public function checkUserJoined($roomId , RoomJoin $join)
+    public function checkUserJoined($roomId, RoomJoin $join)
     {
         return $join->where([
-            ['status', '=', config('status.room_join.available')],
-            ['user_id', '=', Auth::user()->id],
-            ['room_id', '=', $roomId]
-        ])
-            ->count() > 0;
+                ['status', '=', config('status.room_join.available')],
+                ['user_id', '=', Auth::user()->id],
+                ['room_id', '=', $roomId]
+            ])
+                ->count() > 0;
     }
 }

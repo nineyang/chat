@@ -28,12 +28,18 @@ class Message extends Model
     ];
 
     /**
-     * Get all of the owning commentable models.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\morphTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function messages()
+    public function room()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Room::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

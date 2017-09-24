@@ -122,8 +122,8 @@ class RoomController extends Controller
     }
 
     /**
-     * 聊天室
      * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function chat($id)
     {
@@ -133,11 +133,12 @@ class RoomController extends Controller
         if (Auth::user()->id != $room->user_id && !$this->model->checkUserJoined($id, $this->join)) {
             abort(403, '请先加入房间');
         }
-        dd($room->message);
+
+        return view('room.chat', ['room' => $room]);
     }
 
 
-    public function join(Request $request , $id)
+    public function join(Request $request, $id)
     {
         $room = $this->checkAndGet($id);
 //        已经加入过了
