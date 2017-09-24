@@ -3,12 +3,21 @@
  */
 var ws, name;
 
-// 创建websocket
-ws = new WebSocket("ws://192.168.0.102:9130");
-// 当socket连接打开时，输入用户名
-ws.onopen = onopen;
+ws = new WebSocket("ws://127.0.0.1:9502");
+ws.onopen = function (evt) {
+    //websocket.readyState 属性：
+    /*
+     CONNECTING    0    The connection is not yet open.
+     OPEN    1    The connection is open and ready to communicate.
+     CLOSING    2    The connection is in the process of closing.
+     CLOSED    3    The connection is closed or couldn't be opened.
+     */
+    console.log(ws.readyState);
+};
 // 当有消息时根据消息类型显示不同信息
-ws.onmessage = onmessage;
+ws.onmessage = function (evt) {
+    console.log(evt);
+};
 ws.onclose = function () {
     console.log("连接关闭，定时重连");
 };
@@ -16,18 +25,6 @@ ws.onerror = function () {
     console.log("出现错误");
 };
 
-function onopen() {
-
-    var name = 'nine', data = '{"type":"1","user":"' + name + '"}';
-
-    ws.send(data);
-}
-
-function onmessage(e) {
-    var data = eval("(" + e.data + ")");
-    var info = $('#chatinfo').html();
-    console.log(data);
-}
 
 $('#send').click(function (e) {
     var data = {

@@ -135,8 +135,6 @@ class RoomController extends Controller
             abort(403, '请先加入房间');
         }
 
-//        websocket
-
         return view('room.chat', ['room' => $room]);
     }
 
