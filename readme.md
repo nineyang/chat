@@ -5,16 +5,22 @@
 1. 
 
 ```php
-https://github.com/nineyang/chat
+git clone https://github.com/nineyang/chat
 ```
 
-2.
+2. 
 
 ```php
 cp .env.example .env
 ```
 
 3.
+ 
+```php
+php artisan migrate
+```
+
+3. 
 
 ```php
 php artisan swoole:action start
