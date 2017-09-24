@@ -7,6 +7,7 @@ use App\Room;
 use App\RoomJoin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Storage;
@@ -47,7 +48,7 @@ class RoomController extends Controller
      */
     public function create()
     {
-        return view('add');
+        return view('room.add');
     }
 
     public function edit(Request $request)
@@ -56,10 +57,10 @@ class RoomController extends Controller
         $room = $this->checkAndGet($request->id);
 //        判断是否有权限
         if ($room->user_id != $request->user()->id) {
-            abort(403 , '无权操作');
+            abort(403, '无权操作');
         }
 
-        return view('edit', ['room' => $room]);
+        return view('room.edit', ['room' => $room]);
     }
 
     /**
@@ -117,16 +118,46 @@ class RoomController extends Controller
     public function lists()
     {
         $rooms = $this->model->paginate(config('room.page_size'));
-        return view('lists', ['rooms' => $rooms]);
+        return view('room.lists', ['rooms' => $rooms]);
     }
 
+    /**
+     * 聊天室
+     * @param $id
+     */
     public function chat($id)
     {
 //        判断房间是否存在
         $room = $this->checkAndGet($id);
 //        判断用户是否加入
-        if (!$this->model->checkUserJoined($id, $this->join)) {
-            abort(403 , '请先加入房间');
+        if (Auth::user()->id != $room->user_id && !$this->model->checkUserJoined($id, $this->join)) {
+            abort(403, '请先加入房间');
         }
+
+    }
+
+
+    public function join(Request $request , $id)
+    {
+        $room = $this->checkAndGet($id);
+//        已经加入过了
+        if ($this->model->checkUserJoined($id, $this->join) || Auth::user()->id == $room->user_id) {
+            return redirect("room/{$id}");
+        }
+
+//        判断是否需要密码
+        if ($room->isPrivate) {
+            return redirect('room/lists')->with('modal', '请输入密码');
+        }
+
+//        加入
+        $data = [
+            'user_id' => Auth::user()->id,
+            'room_id' => $id,
+            'created_at' => time(),
+            'updated_at' => time()
+        ];
+        $this->join->fill($data)->save();
+        return redirect("room/{$id}")->with('message', 'joined success');
     }
 }

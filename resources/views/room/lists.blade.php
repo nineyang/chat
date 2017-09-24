@@ -11,8 +11,10 @@
                     @foreach($rooms as $room)
                         <div class="col-sm-6 col-md-4">
                             <div class="thumbnail">
-                                <img src="{{asset(empty($room->cover) ? config('room.default_room_pic') : config('room.file_type') . $room->cover)}}"
-                                     alt="{{$room->title}}">
+                                <a target="_blank" href="{{url("room/$room->id")}}">
+                                    <img src="{{asset(empty($room->cover) ? config('room.default_room_pic') : config('room.file_type') . $room->cover)}}"
+                                         alt="{{$room->title}}">
+                                </a>
                                 <div class="caption">
                                     <h4>{{$room->title}}</h4>
                                     <p>

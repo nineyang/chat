@@ -16,12 +16,17 @@ Route::get('/', 'HomeController@index');
 // room
 Route::group(['middleware' => 'auth', 'prefix' => 'room'], function () {
 
-    Route::get('create' , 'RoomController@create');
-    Route::get('lists' , 'RoomController@lists');
-    Route::post('add' , 'RoomController@add');
-    Route::get('/{id}/edit' , 'RoomController@edit');
-    Route::post('/{id}/update' , 'RoomController@update');
-    Route::get('{id}' , 'RoomController@chat');
+    Route::get('create', 'RoomController@create');
+    Route::get('lists', 'RoomController@lists');
+    Route::post('add', 'RoomController@add');
+    Route::get('/{id}/edit', 'RoomController@edit');
+    Route::post('/{id}/update', 'RoomController@update');
+    Route::get('{id}', 'RoomController@chat');
+    Route::post("/{id}/join", 'RoomController@join');
+});
+
+Route::group(['middleware' => 'auth', 'prefix' => 'api/room' , 'namespace' => 'Api'], function () {
+    Route::post("/{id}/join" , 'RoomController@join');
 });
 
 Auth::routes();

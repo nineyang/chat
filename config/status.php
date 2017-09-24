@@ -10,4 +10,8 @@ return [
         'available' => 0,
         'deleted' => 10
     ],
+    'room_join' => [
+        'available' => 0,
+        'deleted' => 10
+    ],
 ];
