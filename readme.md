@@ -8,19 +8,25 @@
 git clone https://github.com/nineyang/chat
 ```
 
-2. 
+2.
+
+```php
+composer install
+```
+
+3. 
 
 ```php
 cp .env.example .env
 ```
 
-3.
+4.
  
 ```php
 php artisan migrate
 ```
 
-3. 
+5. 
 
 ```php
 php artisan swoole:action start
