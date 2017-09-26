@@ -14,4 +14,8 @@ return [
         'available' => 0,
         'deleted' => 10
     ],
+    'message' => [
+        'available' => 0,
+        'deleted' => 10
+    ],
 ];

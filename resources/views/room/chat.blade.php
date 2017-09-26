@@ -17,35 +17,22 @@
 
                                 {{--内容--}}
                                 <div class="content">
-                                    <div class="chat-left">
-                                        <img src="/{{config('room.default_avatar')}}" alt="" class="avatar pull-left">
-                                        <div class="pull-left">
-                                            <span class="username">Nine</span>
-                                            <br>
-                                            <span class="content-span">hello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,world</span>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix"></div>
 
-                                    <div class="chat-left">
-                                        <img src="/{{config('room.default_avatar')}}" alt="" class="avatar pull-left">
-                                        <div class="pull-left">
-                                            <span class="username">Nine</span>
-                                            <br>
-                                            <span class="content-span">hello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,world</span>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix"></div>
 
-                                    <div class="chat-right">
-                                        <img src="/{{config('room.default_avatar')}}" alt="" class="avatar pull-right">
-                                        <div class="pull-right">
-                                            <span class="username">Nine</span>
-                                            <br>
-                                            <span class="content-span">hello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,worldhello,world</span>
+                                    @foreach($messages as $message)
+
+                                        <div class="{{Auth::user()->id == $message->user_id ? 'chat-right' : 'chat-left'}}">
+                                            <img src="/{{config('room.default_avatar')}}" alt=""
+                                                 class="avatar pull-{{Auth::user()->id == $message->user_id ? 'right' : 'left'}}">
+                                            <div class="{{Auth::user()->id == $message->user_id ? 'pull-right' : 'pull-left'}}">
+                                                <span class="username">{{$message->user_name}}</span>
+                                                <br>
+                                                <span class="content-span">{{$message->content}}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="clearfix"></div>
+                                        <div class="clearfix"></div>
+
+                                    @endforeach
 
                                 </div>
 
@@ -113,12 +100,12 @@
 
     .chat-left > div {
         margin-left: 3px;
-        margin-bottom:5px;
+        margin-bottom: 5px;
     }
 
     .chat-right > div {
         margin-right: 3px;
-        margin-bottom:5px;
+        margin-bottom: 5px;
     }
 
     .username {

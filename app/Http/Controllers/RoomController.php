@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRoom;
 use App\Room;
 use App\RoomJoin;
+use App\Message;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,17 +28,27 @@ class RoomController extends Controller
     public $join;
 
     /**
+     * @var Message
+     */
+    public $message;
+
+    /**
      * RoomController constructor.
      * @param Room $room
      * @param RoomJoin $join
+     * @param Message $message
      */
-    public function __construct(Room $room, RoomJoin $join)
+    public function __construct(Room $room, RoomJoin $join , Message $message)
     {
         $this->middleware('auth');
         $this->model = $room;
         $this->join = $join;
+        $this->message = $message;
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         return view('home');
@@ -52,6 +63,10 @@ class RoomController extends Controller
         return view('room.add');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function edit(Request $request)
     {
 //        判断是否存在
@@ -134,8 +149,9 @@ class RoomController extends Controller
         if (Auth::user()->id != $room->user_id && !$this->model->checkUserJoined($id, $this->join)) {
             abort(403, '请先加入房间');
         }
+        $latestMessages = $this->message->getLatestMessage($id , config('room.message_page_size'));
 
-        return view('room.chat', ['room' => $room]);
+        return view('room.chat', ['room' => $room , 'messages' => $latestMessages]);
     }
 
     /**

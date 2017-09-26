@@ -21,12 +21,18 @@ cp .env.example .env
 ```
 
 4.
+
+```php
+php artisan key:generate
+```
+
+5.
  
 ```php
 php artisan migrate
 ```
 
-5. 
+6. 
 
 ```php
 php artisan swoole:action start
@@ -40,4 +46,8 @@ php artisan swoole:action start
 ## todo
 ~~1. 完成发送效果~~
 
-2. 数据入库
+~~2. 数据入库~~
+
+3. 当前人数，用户头像，获取之前的消息，加入群时的通知，发帖时间等小效果
+
+4. 上线一个体验版
