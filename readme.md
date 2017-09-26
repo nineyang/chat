@@ -4,37 +4,37 @@
 ## 使用
 1. 
 
-```php
+```
 git clone https://github.com/nineyang/chat
 ```
 
 2.
 
-```php
+```
 composer install
 ```
 
 3. 
 
-```php
+```
 cp .env.example .env
 ```
 
 4.
 
-```php
+```
 php artisan key:generate
 ```
 
 5.
  
-```php
+```
 php artisan migrate
 ```
 
 6. 
 
-```php
+```
 php artisan swoole:action start
 ```
 
