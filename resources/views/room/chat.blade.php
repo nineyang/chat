@@ -63,7 +63,7 @@
                     </div>
                     {{--room end--}}
                     <span class="default-value hide" data-default-avatar="{{config('room.default_avatar')}}"
-                          data-user-id="{{Auth::user()->id}}"></span>
+                          data-user-id="{{Auth::user()->id}}" data-room-id="{{$room->id}}"></span>
 
                 </div>
 

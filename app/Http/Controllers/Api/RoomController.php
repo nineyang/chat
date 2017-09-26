@@ -49,7 +49,7 @@ class RoomController extends Controller
         }
 
 //        判断是否需要密码
-        if ($room->is_private && !Hash::check($request->cipher , $room->cipher)) {
+        if ($room->is_private && !Hash::check($request->cipher, $room->cipher)) {
             return response()->json(['status' => 2, 'message' => '密码不正确']);
         }
 

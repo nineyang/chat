@@ -138,7 +138,11 @@ class RoomController extends Controller
         return view('room.chat', ['room' => $room]);
     }
 
-
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function join(Request $request, $id)
     {
         $room = $this->checkAndGet($id);
