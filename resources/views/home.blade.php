@@ -69,18 +69,25 @@
     {{ $rooms->links('pagination.default') }}
 
     <script>
+        var cipher = $('#cipher').val() , that = $(this);
         var id, token = $('meta[name="csrf-token"]').attr('content');
         $('.join').click(function () {
             id = $(this).data('id');
             if ($(this).data('private') == 1) {
                 $('#joinModal').modal('show');
             } else {
-                location.href = "/room/" + id;
+                $.post("/api/room/" + id + "/join", {'_token': token, 'cipher': cipher}, function (res) {
+                    if (res.status == 0 || res.status == 1) {
+                        location.href = "/room/" + id;
+                    } else {
+                        that.attr('data-content' , res.message);
+                        that.popover('show');
+                    }
+                });
             }
         });
 
         $('#confirm').click(function () {
-            var cipher = $('#cipher').val() , that = $(this);
             $.post("/api/room/" + id + "/join", {'_token': token, 'cipher': cipher}, function (res) {
                 if (res.status == 0 || res.status == 1) {
                     location.href = "/room/" + id;
