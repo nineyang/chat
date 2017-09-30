@@ -93,7 +93,8 @@ class Swoole extends Command
                         'room_id' => $data['room_id'],
                         'created_at' => time()
                     ];
-                    $this->message->fill($message)->save();
+//                    $this->message->fill($message)->save();
+                    Message::create($message);
                     $user = $this->user->find($data['user_id']);
 //                    防止注入信息，如果没有找到该用户就直接跳出
                     if (!$user) {
