@@ -27,7 +27,8 @@
                                             <div class="{{Auth::user()->id == $message->user_id ? 'pull-right' : 'pull-left'}}">
                                                 <span class="username username-{{Auth::user()->id == $message->user_id ? 'right' : 'left'}}">{{$message->user_name}}</span>
                                                 <br>
-                                                <span class="content-span">{{$message->content}}</span>
+                                                {{--防止换行符被转字符串--}}
+                                                <div class="content-span">{!!$message->content!!}</div>
                                             </div>
                                         </div>
                                         <div class="clearfix"></div>

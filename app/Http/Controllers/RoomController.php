@@ -38,7 +38,7 @@ class RoomController extends Controller
      * @param RoomJoin $join
      * @param Message $message
      */
-    public function __construct(Room $room, RoomJoin $join , Message $message)
+    public function __construct(Room $room, RoomJoin $join, Message $message)
     {
         $this->middleware('auth');
         $this->model = $room;
@@ -149,9 +149,12 @@ class RoomController extends Controller
         if (Auth::user()->id != $room->user_id && !$this->model->checkUserJoined($id, $this->join)) {
             abort(403, '请先加入房间');
         }
-        $latestMessages = $this->message->getLatestMessage($id , config('room.message_page_size'));
+        $latestMessages = $this->message->getLatestMessage($id, config('room.message_page_size'));
+        foreach ($latestMessages as $message) {
+            $message->content = nl2br($message->content);
+        }
 
-        return view('room.chat', ['room' => $room , 'messages' => $latestMessages]);
+        return view('room.chat', ['room' => $room, 'messages' => $latestMessages]);
     }
 
     /**

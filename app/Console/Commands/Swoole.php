@@ -101,7 +101,7 @@ class Swoole extends Command
                         break;
                     }
                     $returnMessage = json_encode([
-                        'message' => $data['message'],
+                        'message' => nl2br($data['message']),
                         'user' => [
                             'id' => $user->id,
                             'name' => $user->name

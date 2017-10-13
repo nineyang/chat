@@ -28,16 +28,15 @@ function changeHight() {
 }
 
 //一开始就滚动到最下面
-changeHight();
-
+setTimeout("changeHight()", 5);
 
 // 当有消息时根据消息类型显示不同信息
 ws.onmessage = function (evt) {
     var data = JSON.parse(evt.data);
     if (data.user.id == currUser) {
-        $('.content').append('<div class="clearfix"></div> <div class="chat-right"> <img src="' + default_avatar + '" alt="" class="avatar pull-right"> <div class="pull-right"> <span class="username username-right">' + data.user.name + '</span> <br> <span class="content-span">' + data.message + '</span> </div> </div>');
+        $('.content').append('<div class="clearfix"></div> <div class="chat-right"> <img src="' + default_avatar + '" alt="" class="avatar pull-right"> <div class="pull-right"> <span class="username username-right">' + data.user.name + '</span> <br> <div class="content-span">' + data.message + '</div> </div> </div>');
     } else {
-        $('.content').append('<div class="clearfix"></div> <div class="chat-left"> <img src="' + default_avatar + '" alt="" class="avatar pull-left"> <div class="pull-left"> <span class="username username-left">' + data.user.name + '</span> <br> <span class="content-span">' + data.message + '</span> </div> </div>');
+        $('.content').append('<div class="clearfix"></div> <div class="chat-left"> <img src="' + default_avatar + '" alt="" class="avatar pull-left"> <div class="pull-left"> <span class="username username-left">' + data.user.name + '</span> <br> <div class="content-span">' + data.message + '</div> </div> </div>');
     }
     //滚到底部
     setTimeout("changeHight()", 5);
@@ -56,7 +55,7 @@ ws.onerror = function () {
     console.log("出现错误");
 };
 
-$('#send').click(function (e) {
+var send = function (e) {
     var data = {
         'message': $('.wait-send').val(),
         'user_id': currUser,
@@ -66,5 +65,26 @@ $('#send').click(function (e) {
     ws.send(JSON.stringify(data));
     //清空数据
     $('.wait-send').val('');
+};
+
+$('#send').click(function (e) {
+    send(e);
 });
+
+//监听回车
+$(document).keydown(function (e) {
+    //shift+回车就是换行
+
+    if (e.which == 13) {
+        e.preventDefault();
+        if (e.shiftKey == 1) {
+            var currVal = $('.wait-send').val();
+            $('.wait-send').val(currVal += "\r\n");
+        }else{
+            send(e);
+        }
+    }
+});
+
+
 

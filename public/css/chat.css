@@ -63,9 +63,10 @@
     color: white;
     border-radius: 5px;
     max-width: 250px;
-    display: inline-block;
     word-break: break-all;
     min-height: 20px;
     min-width: 26px;
     margin: 0 3px;
+    resize: none;
+    outline: none;
 }
