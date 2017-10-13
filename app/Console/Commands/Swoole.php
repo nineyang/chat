@@ -83,7 +83,7 @@ class Swoole extends Command
     {
         $ws = new \swoole_websocket_server(config('swoole.host'), config('swoole.port'));
         $ws->on('open', function ($ws, $request) {
-//            $ws->push($request->fd, "hello, welcome\n");
+// todo something
         });
 
         //监听WebSocket消息事件
@@ -91,14 +91,14 @@ class Swoole extends Command
             $data = json_decode($frame->data, true);
             switch ($data['type']) {
                 case 'connect':
-                    Redis::sadd("room:{$data['room_id']}", $frame->fd);
+                    Redis::zadd("room:{$data['room_id']}", intval($data['user_id']), $frame->fd);
 //                    同时使用hash标识fd在哪个房间
                     Redis::hset('room', $frame->fd, $data['room_id']);
 //                    加入房间提示
 //                    获取这个房间的用户总数
 //                    +1 是代表群主
                     $memberInfo = [
-                        'online' => Redis::scard("room:{$data['room_id']}"),
+                        'online' => Redis::zcard("room:{$data['room_id']}"),
                         'all' => $this->room->where(['room_id' => $data['room_id'], 'status' => 0])->count() + 1
                     ];
                     $this->sendAll($ws, $data['room_id'], $data['user_id'], $memberInfo,
@@ -118,8 +118,8 @@ class Swoole extends Command
                     break;
                 case 'close':
 //                    移除
-                    var_dump($frame->fd);
-                    Redis::srem("room:{$data['room_id']}", $frame->fd);
+                    Redis::zrem("room:{$data['room_id']}", $frame->fd);
+
                     break;
             }
 
@@ -128,8 +128,14 @@ class Swoole extends Command
         $ws->on('close', function ($ws, $fd) {
 //            获取fd所对应的房间号
             $room_id = Redis::hget('room', $fd);
-            Redis::srem("room:{$room_id}", $fd);
-
+            $user_id = intval(Redis::zscore("room:{$room_id}", $fd));
+            Redis::zrem("room:{$room_id}", $fd);
+            $memberInfo = [
+                'online' => Redis::zcard("room:{$room_id}"),
+                'all' => $this->room->where(['room_id' => $room_id, 'status' => 0])->count() + 1
+            ];
+            $this->sendAll($ws, $room_id, $user_id, $memberInfo,
+                'leave');
         });
 
         $ws->start();
@@ -159,7 +165,7 @@ class Swoole extends Command
      * @param string $type
      * @return bool
      */
-    private function sendAll($ws, $room_id, $user_id = '', $message = null, $type = 'message')
+    private function sendAll($ws, $room_id, $user_id = null, $message = null, $type = 'message')
     {
         $user = $this->user->find($user_id, ['id', 'name']);
         if (!$user) {
@@ -170,7 +176,7 @@ class Swoole extends Command
             'type' => $type,
             'user' => $user
         ]);
-        $members = Redis::smembers("room:{$room_id}");
+        $members = Redis::zrange("room:{$room_id}" , 0 , -1);
         foreach ($members as $fd) {
             $ws->push($fd, $message);
         }

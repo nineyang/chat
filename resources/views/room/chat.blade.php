@@ -20,7 +20,6 @@
                                 {{--内容--}}
                                 <div class="content">
 
-
                                     @foreach($messages as $message)
 
                                         <div class="{{Auth::user()->id == $message->user_id ? 'chat-right' : 'chat-left'}}">

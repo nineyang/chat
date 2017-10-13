@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Redirect;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
-use Workerman\Worker;
+use Illuminate\Support\Facades\Redis;
 
 class RoomController extends Controller
 {

@@ -33,6 +33,7 @@ setTimeout("changeHight()", 5);
 // 当有消息时根据消息类型显示不同信息
 ws.onmessage = function (evt) {
     var data = JSON.parse(evt.data);
+    console.log(data);
     //判断是join还是message
     if (data.type == 'message') {
         if (data.user.id == currUser) {
@@ -44,6 +45,10 @@ ws.onmessage = function (evt) {
         $('.all').text(data.message.all);
         $('.online').text(data.message.online);
         $('.content').append('<span class="joined">' + data.user.name + '加入了房间</span>');
+    } else if (data.type == 'leave') {
+        $('.all').text(data.message.all);
+        $('.online').text(data.message.online);
+        $('.content').append('<span class="joined">' + data.user.name + '离开了房间</span>');
     }
 
     //滚到底部
@@ -81,7 +86,6 @@ $('#send').click(function (e) {
 //监听回车
 $(document).keydown(function (e) {
     //shift+回车就是换行
-
     if (e.which == 13) {
         e.preventDefault();
         if (e.shiftKey == 1) {
