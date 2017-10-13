@@ -51,7 +51,6 @@ class Room extends Model
                 ['status', '=', config('status.room_join.available')],
                 ['user_id', '=', Auth::user()->id],
                 ['room_id', '=', $roomId]
-            ])
-                ->count() > 0;
+            ])->exists();
     }
 }

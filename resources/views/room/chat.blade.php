@@ -13,7 +13,9 @@
 
                             <div class="caption">
                                 {{--头部--}}
-                                <h4>{{$room->title}}</h4>
+                                <h4>{{$room->title}} <span class="pull-right number">(<span class="online"
+                                        >0</span>/{{$memberNum}})
+                                    </span></h4>
 
                                 {{--内容--}}
                                 <div class="content">

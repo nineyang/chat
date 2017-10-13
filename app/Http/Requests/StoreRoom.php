@@ -24,7 +24,7 @@ class StoreRoom extends FormRequest
     public function rules()
     {
         return [
-            'cover' => 'image',
+            'cover' => 'max:2048|mimes:jpg,png,gif',
             'title' => 'required|max:32',
             'isPrivate' => 'required|boolean'
         ];
@@ -40,7 +40,8 @@ class StoreRoom extends FormRequest
             'title.max' => '最大不可超过32个字符',
             'isPrivate.required' => '请确定是否私密',
             'isPrivate.boolean' => '是否私密的格式不合法',
-            'cover.image' => '文件格式不合法'
+            'cover.mimes' => '文件格式不合法',
+            'cover.max' => '文件不能超过2M',
         ];
     }
 }

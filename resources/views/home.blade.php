@@ -16,7 +16,7 @@
                                          alt="{{$room->title}}">
                                 </a>
                                 <div class="caption">
-                                    <h4>{{$room->title}}</h4>
+                                    <h4>{{str_limit( $room->title , 20)}}</h4>
                                     <p>
                                         <button data-id="{{$room->id}}" data-private="{{$room->is_private}}"
                                                 class="btn btn-primary join">加入
@@ -69,7 +69,7 @@
     {{ $rooms->links('pagination.default') }}
 
     <script>
-        var cipher = $('#cipher').val() , that = $(this);
+        var cipher = $('#cipher').val(), that = $(this);
         var id, token = $('meta[name="csrf-token"]').attr('content');
         $('.join').click(function () {
             id = $(this).data('id');
@@ -80,7 +80,7 @@
                     if (res.status == 0 || res.status == 1) {
                         location.href = "/room/" + id;
                     } else {
-                        that.attr('data-content' , res.message);
+                        that.attr('data-content', res.message);
                         that.popover('show');
                     }
                 });
@@ -92,7 +92,7 @@
                 if (res.status == 0 || res.status == 1) {
                     location.href = "/room/" + id;
                 } else {
-                    that.attr('data-content' , res.message);
+                    that.attr('data-content', res.message);
                     that.popover('show');
                 }
             });

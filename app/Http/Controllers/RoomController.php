@@ -129,6 +129,7 @@ class RoomController extends Controller
     }
 
     /**
+     * 我加入的和我创建的
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function lists()
@@ -153,8 +154,10 @@ class RoomController extends Controller
         foreach ($latestMessages as $message) {
             $message->content = nl2br($message->content);
         }
+//        获取圈子成员
+        $memberNum = $this->join->memberNum($id);
 
-        return view('room.chat', ['room' => $room, 'messages' => $latestMessages]);
+        return view('room.chat', ['room' => $room, 'messages' => $latestMessages, 'memberNum' => $memberNum]);
     }
 
     /**

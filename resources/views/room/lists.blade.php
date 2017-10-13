@@ -16,7 +16,7 @@
                                          alt="{{$room->title}}">
                                 </a>
                                 <div class="caption">
-                                    <h4>{{$room->title}}</h4>
+                                    <h4>{{str_limit($room->title , 20 )}}</h4>
                                     <p>
                                         @if($room->user_id == Auth::user()->id)
                                             <a href="{{url("room/$room->id/edit")}}" class="btn btn-primary"

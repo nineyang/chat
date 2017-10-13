@@ -26,4 +26,16 @@ class RoomJoin extends Model
         'updated_at',
         'status'
     ];
+
+    /**
+     * @param $room_id
+     * @return mixed
+     */
+    public function memberNum($room_id)
+    {
+        return $this->where([
+            'room_id' => $room_id,
+            'status' => 0
+        ])->count();
+    }
 }
