@@ -33,7 +33,6 @@ setTimeout("changeHight()", 5);
 // 当有消息时根据消息类型显示不同信息
 ws.onmessage = function (evt) {
     var data = JSON.parse(evt.data);
-    console.log(data);
     //判断是join还是message
     if (data.type == 'message') {
         if (data.user.id == currUser) {
