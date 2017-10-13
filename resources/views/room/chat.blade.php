@@ -14,7 +14,7 @@
                             <div class="caption">
                                 {{--头部--}}
                                 <h4>{{$room->title}} <span class="pull-right number">(<span class="online"
-                                        >0</span>/{{$memberNum}})
+                                        >0</span>/<span class="all">{{$memberNum}}</span>)
                                     </span></h4>
 
                                 {{--内容--}}
@@ -66,7 +66,5 @@
 
     <script src="{{asset('js/ws.js')}}">
     </script>
-
-
 
 @endsection

@@ -3,9 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Message;
+use App\Room;
+use App\RoomJoin;
 use App\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
+use phpDocumentor\Reflection\Types\Null_;
 
 class Swoole extends Command
 {
@@ -34,15 +37,22 @@ class Swoole extends Command
     protected $user;
 
     /**
+     * @var Room
+     */
+    protected $room;
+
+    /**
      * Swoole constructor.
      * @param Message $message
      * @param User $user
+     * @param RoomJoin $room
      */
-    public function __construct(Message $message, User $user)
+    public function __construct(Message $message, User $user, RoomJoin $room)
     {
         parent::__construct();
         $this->message = $message;
         $this->user = $user;
+        $this->room = $room;
     }
 
     /**
@@ -84,6 +94,15 @@ class Swoole extends Command
                     Redis::sadd("room:{$data['room_id']}", $frame->fd);
 //                    同时使用hash标识fd在哪个房间
                     Redis::hset('room', $frame->fd, $data['room_id']);
+//                    加入房间提示
+//                    获取这个房间的用户总数
+//                    +1 是代表群主
+                    $memberInfo = [
+                        'online' => Redis::scard("room:{$data['room_id']}"),
+                        'all' => $this->room->where(['room_id' => $data['room_id'], 'status' => 0])->count() + 1
+                    ];
+                    $this->sendAll($ws, $data['room_id'], $data['user_id'], $memberInfo,
+                        'join');
                     break;
                 case 'message':
 //                    入库
@@ -95,22 +114,7 @@ class Swoole extends Command
                     ];
 //                    $this->message->fill($message)->save();
                     Message::create($message);
-                    $user = $this->user->find($data['user_id']);
-//                    防止注入信息，如果没有找到该用户就直接跳出
-                    if (!$user) {
-                        break;
-                    }
-                    $returnMessage = json_encode([
-                        'message' => nl2br($data['message']),
-                        'user' => [
-                            'id' => $user->id,
-                            'name' => $user->name
-                        ]
-                    ]);
-                    $members = Redis::smembers("room:{$data['room_id']}");
-                    foreach ($members as $fd) {
-                        $ws->push($fd, $returnMessage);
-                    }
+                    $this->sendAll($ws, $data['room_id'], $data['user_id'], $data['message']);
                     break;
                 case 'close':
 //                    移除
@@ -118,15 +122,12 @@ class Swoole extends Command
                     Redis::srem("room:{$data['room_id']}", $frame->fd);
                     break;
             }
-//            群发
-//            foreach ($ws->connections as $connect) {
-//                $ws->push($connect, "{$frame->data}");
-//            }
+
         });
 
         $ws->on('close', function ($ws, $fd) {
 //            获取fd所对应的房间号
-            $room_id = Redis::hget('room' , $fd);
+            $room_id = Redis::hget('room', $fd);
             Redis::srem("room:{$room_id}", $fd);
 
         });
@@ -148,5 +149,30 @@ class Swoole extends Command
     private function restart()
     {
 
+    }
+
+    /**
+     * @param $ws
+     * @param $room_id
+     * @param string $user_id
+     * @param string $message
+     * @param string $type
+     * @return bool
+     */
+    private function sendAll($ws, $room_id, $user_id = '', $message = null, $type = 'message')
+    {
+        $user = $this->user->find($user_id, ['id', 'name']);
+        if (!$user) {
+            return false;
+        }
+        $message = json_encode([
+            'message' => is_string($message) ? nl2br($message) : $message,
+            'type' => $type,
+            'user' => $user
+        ]);
+        $members = Redis::smembers("room:{$room_id}");
+        foreach ($members as $fd) {
+            $ws->push($fd, $message);
+        }
     }
 }
