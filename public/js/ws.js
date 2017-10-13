@@ -27,14 +27,17 @@ function changeHight() {
     }
 }
 
+//一开始就滚动到最下面
+changeHight();
+
 
 // 当有消息时根据消息类型显示不同信息
 ws.onmessage = function (evt) {
     var data = JSON.parse(evt.data);
     if (data.user.id == currUser) {
-        $('.content').append('<div class="clearfix"></div> <div class="chat-right"> <img src="' + default_avatar + '" alt="" class="avatar pull-right"> <div class="pull-right"> <span class="username">' + data.user.name + '</span> <br> <span class="content-span">' + data.message + '</span> </div> </div>');
+        $('.content').append('<div class="clearfix"></div> <div class="chat-right"> <img src="' + default_avatar + '" alt="" class="avatar pull-right"> <div class="pull-right"> <span class="username username-right">' + data.user.name + '</span> <br> <span class="content-span">' + data.message + '</span> </div> </div>');
     } else {
-        $('.content').append('<div class="clearfix"></div> <div class="chat-left"> <img src="' + default_avatar + '" alt="" class="avatar pull-left"> <div class="pull-left"> <span class="username">' + data.user.name + '</span> <br> <span class="content-span">' + data.message + '</span> </div> </div>');
+        $('.content').append('<div class="clearfix"></div> <div class="chat-left"> <img src="' + default_avatar + '" alt="" class="avatar pull-left"> <div class="pull-left"> <span class="username username-left">' + data.user.name + '</span> <br> <span class="content-span">' + data.message + '</span> </div> </div>');
     }
     //滚到底部
     setTimeout("changeHight()", 5);

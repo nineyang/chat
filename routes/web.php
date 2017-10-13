@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->middleware('auth');
 
 // room
 Route::group(['middleware' => 'auth', 'prefix' => 'room'], function () {
